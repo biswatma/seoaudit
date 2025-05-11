@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Audit Pro - Your Free SEO Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .progress-bar-fill {
+            transition: width 0.5s ease-in-out;
+        }
+        .audit-item {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+        .audit-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Custom spinner for audit items */
+        .item-spinner {
+            border: 2px solid rgba(0,0,0,0.1); /* light gray border */
+            border-left-color: #4f46e5; /* indigo-600 */
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: itemSpin 0.8s linear infinite;
+        }
+        @keyframes itemSpin {
+            to { transform: rotate(360deg); }
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Minor style adjustments for better visual appeal */
+        input[type="url"]:focus {
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.4); /* yellow-400 with opacity */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="bg-white/80 backdrop-blur-md shadow-sm fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#hero" class="flex-shrink-0 flex items-center space-x-2">
+                        <svg class="h-8 w-auto text-indigo-600" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 24L13.3333 16L18.6667 20L24 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <rect x="3" y="3" width="26" height="26" rx="4" stroke="currentColor" stroke-width="2.5"/>
+                            <circle cx="23" cy="9" r="2" fill="#3B82F6"/>
+                        </svg>
+                        <span class="font-bold text-xl text-gray-800">SEO Audit Pro</span>
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#hero" class="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="#features" class="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">Features</a>
+                        <a href="#how-it-works" class="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">How It Works</a>
+                        <a href="#audit-form-section" class="bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-2 rounded-md text-sm font-medium transition duration-150">Start Audit</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-600 hover:text-indigo-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#hero" class="text-gray-600 hover:text-indigo-600 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="#features" class="text-gray-600 hover:text-indigo-600 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium">Features</a>
+                <a href="#how-it-works" class="text-gray-600 hover:text-indigo-600 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium">How It Works</a>
+                <a href="#audit-form-section" class="bg-indigo-600 text-white hover:bg-indigo-700 block px-3 py-2 rounded-md text-base font-medium transition duration-150">Start Audit</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="pt-24 pb-16 md:pt-32 md:pb-24 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="heroPattern" patternUnits="userSpaceOnUse" width="80" height="80" patternTransform="scale(1) rotate(30)">
+                        <circle cx="10" cy="10" r="1.5" fill="rgba(255,255,255,0.2)"/>
+                        <circle cx="40" cy="40" r="1.5" fill="rgba(255,255,255,0.2)"/>
+                        <path d="M0 40 Q20 0 40 40 T80 40" stroke="rgba(255,255,255,0.05)" fill="none" stroke-width="1"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#heroPattern)"></rect>
+            </svg>
+        </div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-6">
+                Unlock Your Website's <span class="bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-orange-400">SEO Potential</span>
+            </h1>
+            <p class="text-lg md:text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">
+                Get a comprehensive SEO audit in minutes. Identify issues, get actionable insights, and boost your rankings.
+            </p>
+            <form id="seo-audit-form" class="max-w-xl mx-auto flex flex-col sm:flex-row gap-3 items-center justify-center transition-opacity duration-500">
+                <label for="urlInput" class="sr-only">Website URL</label>
+                <input type="url" id="urlInput" name="url" placeholder="Enter your website URL (e.g., https://example.com)" required
+                       class="flex-grow w-full sm:w-auto px-5 py-3.5 rounded-lg text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-yellow-400 focus:outline-none shadow-lg text-base transition-all duration-300">
+                <button type="submit"
+                        class="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-semibold px-8 py-3.5 rounded-lg shadow-lg transition duration-200 transform hover:scale-105 text-base">
+                    Audit Now
+                </button>
+            </form>
+            <p id="form-error" class="text-red-300 mt-3 text-sm h-5"></p> <!-- Added h-5 for consistent layout -->
+        </div>
+    </section>
+
+    <!-- Anchor for scrolling after form submission. pt-20 for navbar height, -mt-20 to align -->
+    <div id="audit-form-section" class="pt-20 -mt-20"></div> 
+
+    <!-- Audit Progress Section (Initially Hidden) -->
+    <section id="audit-progress-section" class="py-12 md:py-20 bg-gray-50 hidden transition-opacity duration-500">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto bg-white p-6 sm:p-8 rounded-xl shadow-2xl">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-2">Analyzing <span id="audited-url" class="text-indigo-600 break-all">your website</span>...</h2>
+                <p class="text-gray-600 text-center mb-8">Our robots are hard at work. This might take a few moments.</p>
+
+                <div class="w-full bg-gray-200 rounded-full h-4 mb-2 overflow-hidden shadow-inner">
+                    <div id="overall-progress-bar" class="bg-gradient-to-r from-green-400 to-blue-500 h-4 rounded-full progress-bar-fill" style="width: 0%;"></div>
+                </div>
+                <p id="overall-progress-text" class="text-center text-sm text-indigo-600 font-medium mb-8 h-5"></p>
+
+                <ul id="audit-checklist" class="space-y-3">
+                    <!-- Checklist items will be populated by JavaScript -->
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section (Initially Hidden) -->
+    <section id="results-section" class="py-12 md:py-20 bg-gray-100 hidden transition-opacity duration-500">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-4">Audit Complete!</h2>
+            <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Here's what we found for <strong id="results-url" class="text-indigo-600 break-all">your website</strong>. Address these issues to improve your SEO.</p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="suggestions-grid">
+                <!-- Suggestion cards will be populated by JavaScript -->
+            </div>
+             <div class="text-center mt-12">
+                <button onclick="resetAudit()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition duration-200 transform hover:scale-105">
+                    Audit Another Website
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Comprehensive SEO Analysis</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">We dive deep into your website's SEO health, covering all critical aspects.</p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mb-6 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">On-Page SEO</h3>
+                    <p class="text-gray-600 text-center text-sm">Analyze titles, meta descriptions, headings, content structure, and keyword usage.</p>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mb-6 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">Technical SEO</h3>
+                    <p class="text-gray-600 text-center text-sm">Check for site speed, mobile-friendliness, crawlability, indexing issues, and structured data.</p>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mb-6 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">Content Quality</h3>
+                    <p class="text-gray-600 text-center text-sm">Assess content relevance, readability, uniqueness, and identify potential thin or duplicate content.</p>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mb-6 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">Site Performance</h3>
+                    <p class="text-gray-600 text-center text-sm">Evaluate loading speed, image optimization, and server response times for better user experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-16 md:py-24 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Get Your SEO Report in 3 Easy Steps</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Simple, fast, and effective. Understand your SEO landscape effortlessly.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 md:gap-12">
+                <div class="text-center p-6">
+                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-indigo-600 text-white text-3xl font-bold mb-6 mx-auto shadow-lg">1</div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Enter Your URL</h3>
+                    <p class="text-gray-600">Provide the website address you want to analyze. No sign-up required for a basic audit.</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-indigo-600 text-white text-3xl font-bold mb-6 mx-auto shadow-lg">2</div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">We Analyze</h3>
+                    <p class="text-gray-600">Our powerful engine scans your site, checking dozens of critical SEO factors in real-time.</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="flex items-center justify-center h-20 w-20 rounded-full bg-indigo-600 text-white text-3xl font-bold mb-6 mx-auto shadow-lg">3</div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Get Actionable Insights</h3>
+                    <p class="text-gray-600">Receive a clear report with prioritized recommendations to improve your website's SEO performance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="py-16 md:py-24 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-700 text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Improve Your SEO?</h2>
+            <p class="text-lg md:text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">
+                Don't let SEO issues hold your website back. Start your free audit today and take the first step towards better rankings and more traffic.
+            </p>
+            <a href="#audit-form-section"
+               class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-semibold px-10 py-4 rounded-lg shadow-lg transition duration-200 transform hover:scale-105 text-lg inline-block">
+                Analyze My Website Now
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex justify-center items-center space-x-2 mb-4">
+                <svg class="h-7 w-auto text-indigo-400" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 24L13.3333 16L18.6667 20L24 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="3" y="3" width="26" height="26" rx="4" stroke="currentColor" stroke-width="2.5"/>
+                    <circle cx="23" cy="9" r="2" fill="#3B82F6"/>
+                </svg>
+                <span class="font-semibold text-lg text-gray-200">SEO Audit Pro</span>
+            </div>
+            <p class="text-sm">&copy; <span id="currentYear"></span> SEO Audit Pro. All rights reserved. A project for demonstration purposes.</p>
+            <p class="text-xs mt-2">Designed with Tailwind CSS.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.contains('hidden');
+            mobileMenu.classList.toggle('hidden', !isHidden);
+        });
+
+        document.querySelectorAll('#mobile-menu a, nav a[href^="#"]:not(#mobile-menu-button)').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                if (this.closest('#mobile-menu')) {
+                    mobileMenu.classList.add('hidden');
+                }
+                const targetId = this.getAttribute('href');
+                if (targetId && targetId.startsWith('#') && targetId.length > 1) {
+                    e.preventDefault(); // Prevent default if it's a valid internal link
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                         // Adjust for fixed navbar height (approx 64px or 4rem)
+                        const navbarHeight = document.querySelector('nav').offsetHeight || 64;
+                        const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - navbarHeight;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        const auditForm = document.getElementById('seo-audit-form');
+        const urlInput = document.getElementById('urlInput');
+        const formError = document.getElementById('form-error');
+        
+        const heroContentToFade = document.querySelectorAll('#hero h1, #hero p:not(#form-error)');
+        const auditProgressSection = document.getElementById('audit-progress-section');
+        const resultsSection = document.getElementById('results-section');
+        
+        const auditedUrlSpan = document.getElementById('audited-url');
+        const resultsUrlSpan = document.getElementById('results-url');
+        const overallProgressBar = document.getElementById('overall-progress-bar');
+        const overallProgressText = document.getElementById('overall-progress-text');
+        const auditChecklist = document.getElementById('audit-checklist');
+        const suggestionsGrid = document.getElementById('suggestions-grid');
+
+        const auditTasks = [
+            { name: "Validating URL Structure", duration: 500, category: "Setup" },
+            { name: "Checking HTTPS Implementation", duration: 700, category: "Security" },
+            { name: "Analyzing Title Tag", duration: 800, category: "On-Page" },
+            { name: "Evaluating Meta Description", duration: 800, category: "On-Page" },
+            { name: "Scanning Header Tags (H1-H6)", duration: 1000, category: "On-Page" },
+            { name: "Assessing Content Readability", duration: 1200, category: "Content" },
+            { name: "Checking Image ALT Attributes", duration: 900, category: "On-Page" },
+            { name: "Mobile-Friendliness Test", duration: 1500, category: "Technical" },
+            { name: "Page Load Speed Analysis", duration: 2000, category: "Performance" },
+            { name: "Robots.txt File Check", duration: 600, category: "Technical" },
+            { name: "XML Sitemap Verification", duration: 700, category: "Technical" },
+            { name: "Broken Links Scan", duration: 1800, category: "Technical" },
+            { name: "Structured Data Check", duration: 1000, category: "Technical" }
+        ];
+
+        const dummySuggestions = [
+            { title: "Optimize Page Load Speed", description: "Your page takes longer than 3 seconds to load on mobile devices, which can significantly impact user experience and bounce rates.", recommendation: "Compress images, leverage browser caching, minify CSS/JS, and consider a CDN. Aim for a load time under 2 seconds.", severity: "High", category: "Performance" },
+            { title: "Missing Image ALT Attributes", description: "Several images on your page are missing ALT attributes. This affects accessibility and SEO for image search.", recommendation: "Add descriptive ALT text to all meaningful images to improve accessibility and provide context for search engines.", severity: "Medium", category: "On-Page" },
+            { title: "Meta Description Too Short", description: "The meta description for this page is shorter than recommended, potentially reducing click-through rates from search results.", recommendation: "Craft a compelling meta description between 120-158 characters that accurately summarizes the page content and includes relevant keywords.", severity: "Medium", category: "On-Page" },
+            { title: "No H1 Tag Found", description: "The page is missing a primary H1 heading. H1 tags are crucial for defining the main topic of your page.", recommendation: "Add a unique and descriptive H1 tag that clearly communicates the page's purpose.", severity: "High", category: "On-Page" },
+            { title: "Consider Using Structured Data", description: "No structured data (Schema.org markup) was detected. This can help search engines better understand your content and enable rich snippets.", recommendation: "Implement relevant structured data types like Article, Product, or LocalBusiness to enhance your search appearance.", severity: "Low", category: "Technical" },
+            { title: "Improve Content Readability", description: "The content readability score is lower than optimal. Complex sentences or jargon can deter users.", recommendation: "Simplify sentence structures, use shorter paragraphs, and break up text with headings and bullet points. Aim for a Flesch Reading Ease score of 60 or higher.", severity: "Medium", category: "Content" }
+        ];
+
+        function isValidUrl(string) {
+            try {
+                const url = new URL(string);
+                return url.protocol === "http:" || url.protocol === "https:";
+            } catch (_) {
+                return false;  
+            }
+        }
+
+        auditForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const url = urlInput.value.trim();
+
+            if (!url) {
+                formError.textContent = "Please enter a website URL.";
+                urlInput.focus();
+                return;
+            }
+            if (!isValidUrl(url)) {
+                formError.textContent = "Please enter a valid URL (e.g., https://example.com).";
+                urlInput.focus();
+                return;
+            }
+            formError.textContent = "";
+
+            auditForm.classList.add('opacity-0', 'pointer-events-none');
+            heroContentToFade.forEach(el => el.classList.add('opacity-50', 'transition-opacity', 'duration-500'));
+            
+            const auditAnchor = document.getElementById('audit-form-section');
+            const navbarHeight = document.querySelector('nav').offsetHeight || 64;
+            const elementPosition = auditAnchor.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - navbarHeight;
+
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+
+            setTimeout(() => {
+                auditProgressSection.classList.remove('hidden');
+                auditProgressSection.classList.add('opacity-0');
+                 setTimeout(() => auditProgressSection.classList.remove('opacity-0'), 50); 
+
+                auditedUrlSpan.textContent = url;
+                startAuditProcess(url);
+            }, 400); 
+        });
+
+        async function startAuditProcess(url) {
+            auditChecklist.innerHTML = ''; 
+            let totalDuration = auditTasks.reduce((sum, task) => sum + task.duration, 0);
+            let elapsedDuration = 0;
+            
+            overallProgressBar.style.width = '5%'; // Initial small progress
+            overallProgressText.textContent = `Initializing analysis for ${url}...`;
+
+
+            for (let i = 0; i < auditTasks.length; i++) {
+                const task = auditTasks[i];
+                const listItem = document.createElement('li');
+                listItem.className = 'flex items-center justify-between py-3 px-4 bg-white rounded-lg shadow-sm audit-item border border-gray-200';
+                listItem.style.transitionDelay = `${i * 70}ms`;
+                
+                listItem.innerHTML = `
+                    <div class="flex items-center min-w-0">
+                        <div class="item-spinner mr-3 flex-shrink-0"></div>
+                        <span class="text-gray-700 text-sm sm:text-base truncate">${task.name}</span>
+                    </div>
+                    <span class="status-text text-xs sm:text-sm text-blue-500 font-medium whitespace-nowrap ml-2">In Progress...</span>
+                `;
+                auditChecklist.appendChild(listItem);
+                setTimeout(() => listItem.classList.add('visible'), 50 + i * 30);
+
+                await new Promise(resolve => setTimeout(resolve, task.duration * 0.7)); 
+
+                const hasIssue = Math.random() < 0.25; 
+                listItem.querySelector('.item-spinner').remove();
+                const iconPlaceholder = document.createElement('div');
+                iconPlaceholder.className = 'mr-3 w-4 h-4 flex-shrink-0';
+                if (hasIssue) {
+                    iconPlaceholder.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-full w-full text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>`;
+                    listItem.querySelector('.status-text').textContent = 'Issue Found';
+                    listItem.querySelector('.status-text').className = 'status-text text-xs sm:text-sm text-yellow-600 font-medium whitespace-nowrap ml-2';
+                } else {
+                    iconPlaceholder.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-full w-full text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
+                    listItem.querySelector('.status-text').textContent = 'Completed';
+                    listItem.querySelector('.status-text').className = 'status-text text-xs sm:text-sm text-green-600 font-medium whitespace-nowrap ml-2';
+                }
+                listItem.querySelector('.flex.items-center').prepend(iconPlaceholder);
+                
+                elapsedDuration += task.duration;
+                const progressPercentage = Math.min(100, 5 + (elapsedDuration / totalDuration) * 95); // Start from 5%
+                overallProgressBar.style.width = `${progressPercentage}%`;
+                overallProgressText.textContent = `Progress: ${Math.round(progressPercentage)}% - ${task.name} ${hasIssue ? 'checked' : 'completed'}`;
+                
+                await new Promise(resolve => setTimeout(resolve, task.duration * 0.3));
+            }
+
+            overallProgressText.textContent = "Finalizing report...";
+            overallProgressBar.style.width = `100%`;
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            auditProgressSection.classList.add('hidden');
+            resultsUrlSpan.textContent = url;
+            displayResults(url);
+            resultsSection.classList.remove('hidden');
+            resultsSection.classList.add('opacity-0');
+            setTimeout(() => resultsSection.classList.remove('opacity-0'), 50);
+            
+            const resultsAnchor = document.getElementById('results-section');
+            const navbarHeight = document.querySelector('nav').offsetHeight || 64;
+            const elementPosition = resultsAnchor.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - navbarHeight;
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        }
+
+        function displayResults(url) {
+            suggestionsGrid.innerHTML = '';
+            const shuffledSuggestions = [...dummySuggestions].sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * (dummySuggestions.length - 2)) + 3); // Show 3 to length suggestions
+
+            shuffledSuggestions.forEach(suggestion => {
+                let severityClass = '';
+                let severityIcon = '';
+                let severityBorderClass = '';
+                switch (suggestion.severity.toLowerCase()) {
+                    case 'high':
+                        severityClass = 'bg-red-50 text-red-700';
+                        severityBorderClass = 'border-red-500';
+                        severityIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5 text-red-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>`;
+                        break;
+                    case 'medium':
+                        severityClass = 'bg-yellow-50 text-yellow-700';
+                        severityBorderClass = 'border-yellow-500';
+                        severityIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>`;
+                        break;
+                    default: // Low
+                        severityClass = 'bg-blue-50 text-blue-700';
+                        severityBorderClass = 'border-blue-500';
+                        severityIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>`;
+                        break;
+                }
+
+                const card = document.createElement('div');
+                card.className = `bg-white p-6 rounded-xl shadow-lg border-l-4 ${severityBorderClass} ${severityClass} flex flex-col justify-between transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1`;
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center mb-3">
+                            ${severityIcon}
+                            <span class="text-xs font-semibold uppercase tracking-wider">${suggestion.severity} Priority</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">${suggestion.title}</h3>
+                        <p class="text-sm text-gray-600 mb-3 leading-relaxed">${suggestion.description}</p>
+                        <p class="text-sm text-gray-700 font-medium mb-1">Recommendation:</p>
+                        <p class="text-sm text-gray-600 leading-relaxed">${suggestion.recommendation}</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t ${severityBorderClass} opacity-50">
+                         <span class="text-xs text-gray-500 font-medium">Category: ${suggestion.category}</span>
+                    </div>
+                `;
+                suggestionsGrid.appendChild(card);
+            });
+        }
+
+        function resetAudit() {
+            resultsSection.classList.add('hidden');
+            auditProgressSection.classList.add('hidden');
+            
+            auditForm.classList.remove('opacity-0', 'pointer-events-none');
+            heroContentToFade.forEach(el => el.classList.remove('opacity-50'));
+            urlInput.value = '';
+            formError.textContent = "";
+            
+            const heroAnchor = document.getElementById('hero');
+            const navbarHeight = document.querySelector('nav').offsetHeight || 64;
+            const elementPosition = heroAnchor.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - navbarHeight;
+
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            setTimeout(() => urlInput.focus(), 300);
+        }
+    </script>
+
+</body>
+</html>
