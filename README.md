@@ -32,7 +32,7 @@ The process is straightforward:
 ## How to Use
 
 1.  Clone or download the project files.
-2.  Open the `seoaudit.html` file in your web browser.
+2.  Open the `index.html` file in your web browser.
 3.  Enter the URL of the website you want to audit in the input field.
 4.  Click "Audit Now" to start the analysis.
 5.  Review the generated report and recommendations.
